@@ -1,6 +1,8 @@
 var keyList = require('./keys');
 var fs = require('fs');
 var request = require('request');
+var spotify = require('spotify');
+var Twitter = require('twitter');
 var nodeArgvs = process.argv;
 
 console.log(keyList);
