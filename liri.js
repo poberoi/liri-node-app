@@ -21,7 +21,7 @@ var client = new Twitter({
 });
 
 
-// Creating switch/case for arguments 
+// Creating switch/case for third argument
 switch(nodeArgvs[2]){
   
   case 'my-tweets':
@@ -71,6 +71,44 @@ switch(nodeArgvs[2]){
     });
     
     break;
+
+  case 'movie-this':
+
+    var movieName = '';
+
+    if (nodeArgvs.length === 3){
+      movieName = "mr+nobody";
+    } else {
+      for (var i=3; i<nodeArgvs.length; i++){
+        if (i>3 && i<nodeArgvs.length){
+          movieName = movieName + '+' + nodeArgvs[i];
+        } else {
+          movieName = movieName + nodeArgvs[i];
+        }
+      } 
+    }
+
+    console.log(movieName);
+
+    
+    request('http://www.omdbapi.com/?t=' + movieName + '&y=&plot=short&r=json', function (error, response, body) {
+
+      if (!error && response.statusCode == 200) {
+
+        
+        console.log(JSON.stringify(body, null, 2));
+        console.log("Title of movie: " + JSON.parse(body)["Title"]);
+        console.log("The year it was made: " + JSON.parse(body)["Year"]);
+        console.log("The movie's IMDB rating is: " + JSON.parse(body)["imdbRating"]);
+        console.log("Made in: " + JSON.parse(body)["Country"]);
+        console.log("Language spoken: " + JSON.parse(body)["Language"]);
+        console.log("Plot: " + JSON.parse(body)["Plot"]);
+        console.log("Actors: " + JSON.parse(body)["Actors"]);
+      }
+    });
+    
+    break;
+
 
   
   default:
