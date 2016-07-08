@@ -45,7 +45,7 @@ switch(nodeArgvs[2]){
     var songName = '';
 
     if (nodeArgvs.length === 3){
-      songName = "what's my age again";
+      songName = "What's My Age Again";
     } else {
       for (var i=3; i<nodeArgvs.length; i++){
         if (i>3 && i<nodeArgvs.length){
@@ -61,10 +61,13 @@ switch(nodeArgvs[2]){
         console.log('Error occurred: ' + err);
         return;
       }
+      //console.log data to retrieve info needed
+      // console.log(JSON.stringify(data, null, 2);
+      // console.log info
       console.log("Song Name: " + songName);
-      console.log("Preview Link: " + JSON.stringify(data.tracks.href));
+      console.log("Preview Link: " + JSON.stringify(data.tracks.items[1].external_urls.spotify));
       console.log("Artist(s): " + JSON.stringify(data.tracks.items[1].artists[0].name));
-      console.log("Album that song is part of: " + JSON.stringify(data.tracks.items[0].album.name));
+      console.log("Album: " + JSON.stringify(data.tracks.items[0].album.name));
     });
     
     break;
