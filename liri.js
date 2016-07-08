@@ -21,12 +21,9 @@ var client = new Twitter({
 });
 
 
-// Creating switch/case for third argument
-switch(nodeArgvs[2]){
-  
-  case 'my-tweets':
-    
-    var params = {screen_name: 'puneet_o'};
+
+var tweets = function(){
+  var params = {screen_name: 'puneet_o'};
     
     client.get('statuses/user_timeline', params, function(error, tweets, response){
       if (!error) {
@@ -37,44 +34,40 @@ switch(nodeArgvs[2]){
         };  
       };
     });
-    
-    break;
+}
 
-  case 'spotify-this-song':
+var songSearch = function(){
+  var songName = '';
 
-    var songName = '';
-
-    if (nodeArgvs.length === 3){
-      songName = "What's My Age Again";
-    } else {
-      for (var i=3; i<nodeArgvs.length; i++){
-        if (i>3 && i<nodeArgvs.length){
-          songName = songName + ' ' + nodeArgvs[i];
-        } else {
-          songName = songName + nodeArgvs[i];
-        }
+  if (nodeArgvs.length === 3){
+    songName = "What's My Age Again";
+  } else {
+    for (var i=3; i<nodeArgvs.length; i++){
+      if (i>3 && i<nodeArgvs.length){
+        songName = songName + ' ' + nodeArgvs[i];
+      } else {
+        songName = songName + nodeArgvs[i];
       }
     }
+  }
 
-    spotify.search({ type: 'track', query: songName }, function(err, data) {
-      if ( err ) {
-        console.log('Error occurred: ' + err);
-        return;
-      }
-      //console.log data to retrieve info needed
-      // console.log(JSON.stringify(data, null, 2);
-      // console.log info
-      console.log("Song Name: " + songName);
-      console.log("Preview Link: " + JSON.stringify(data.tracks.items[1].external_urls.spotify));
-      console.log("Artist(s): " + JSON.stringify(data.tracks.items[1].artists[0].name));
-      console.log("Album: " + JSON.stringify(data.tracks.items[0].album.name));
-    });
-    
-    break;
+  spotify.search({ type: 'track', query: songName }, function(err, data) {
+    if ( err ) {
+      console.log('Error occurred: ' + err);
+      return;
+    }
+    //console.log data to retrieve info needed
+    // console.log(JSON.stringify(data, null, 2);
+    // console.log info
+    console.log("Song Name: " + songName);
+    console.log("Preview Link: " + JSON.stringify(data.tracks.items[1].external_urls.spotify));
+    console.log("Artist(s): " + JSON.stringify(data.tracks.items[1].artists[0].name));
+    console.log("Album: " + JSON.stringify(data.tracks.items[0].album.name));
+  });
+}
 
-  case 'movie-this':
-
-    var movieName = '';
+var movieSearch = function(){
+  var movieName = '';
 
     if (nodeArgvs.length === 3){
       movieName = "mr+nobody";
@@ -106,10 +99,36 @@ switch(nodeArgvs[2]){
         console.log("Actors: " + JSON.parse(body)["Actors"]);
       }
     });
-    
+}
+
+if (nodeArgvs[2] === 'do-what-it-says'){
+  
+  // Reading Random.txt 
+  fs.readFile("random.txt", "utf8", function(err, data){
+    var output = data.split(',');
+    nodeArgvs[2] = output[0];
+    nodeArgvs[3] = output[1];
+    console.log(nodeArgvs[2]);
+    console.log(nodeArgvs[3]);
+    for (var i=0; i<output.length; i++){
+      console.log(output[i]);
+    }
+  });
+}
+
+switch(nodeArgvs[2]){
+  
+  case 'my-tweets':
+    tweets();
     break;
 
+  case 'spotify-this-song':
+    songSearch();
+    break;
 
+  case 'movie-this':
+    movieSearch();
+    break;
   
   default:
     console.log('error!');
