@@ -133,11 +133,3 @@ switch(nodeArgvs[2]){
   default:
     console.log('error!');
 }
-// Reading Random.txt 
-// fs.readFile("random.txt", "utf8", function(err, data){
-//   var output = data.split(',');
-
-//   for (var i=0; i<output.length; i++){
-//     console.log(output[i]);
-//   }
-// });
