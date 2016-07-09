@@ -6,12 +6,6 @@ var spotify = require('spotify');
 var Twitter = require('twitter');
 var nodeArgvs = process.argv;
 
-// Check to see if keys are being read
-// console.log(keyList.twitterKeys.consumer_key);
-// console.log(keyList.twitterKeys.consumer_secret);
-// console.log(keyList.twitterKeys.access_token_key);
-// console.log(keyList.twitterKeys.access_token_secret);
-
 // Adding key values
 var client = new Twitter({
   consumer_key: keyList.twitterKeys.consumer_key,
@@ -21,7 +15,7 @@ var client = new Twitter({
 });
 
 
-
+// my-tweets function
 var tweets = function(){
   var params = {screen_name: 'puneet_o'};
     
@@ -36,6 +30,7 @@ var tweets = function(){
     });
 }
 
+// spotify this song function
 var songSearch = function(){
   var songName = '';
 
@@ -66,6 +61,7 @@ var songSearch = function(){
   });
 }
 
+// movie function
 var movieSearch = function(){
   var movieName = '';
 
@@ -81,15 +77,10 @@ var movieSearch = function(){
       } 
     }
 
-    console.log(movieName);
-
-    
+    // console.log(movieName);
     request('http://www.omdbapi.com/?t=' + movieName + '&y=&plot=short&r=json', function (error, response, body) {
 
       if (!error && response.statusCode == 200) {
-
-        
-        console.log(JSON.stringify(body, null, 2));
         console.log("Title of movie: " + JSON.parse(body)["Title"]);
         console.log("The year it was made: " + JSON.parse(body)["Year"]);
         console.log("The movie's IMDB rating is: " + JSON.parse(body)["imdbRating"]);
@@ -101,35 +92,43 @@ var movieSearch = function(){
     });
 }
 
-if (nodeArgvs[2] === 'do-what-it-says'){
-  
+// reading random file function
+var randomFile = function(){ 
   // Reading Random.txt 
   fs.readFile("random.txt", "utf8", function(err, data){
     var output = data.split(',');
     nodeArgvs[2] = output[0];
-    nodeArgvs[3] = output[1];
+    nodeArgvs[3] = output[1].replace(/['"]+/g, '');
     console.log(nodeArgvs[2]);
     console.log(nodeArgvs[3]);
-    for (var i=0; i<output.length; i++){
-      console.log(output[i]);
-    }
+    checkNodeArgvs();
+    
   });
 }
 
-switch(nodeArgvs[2]){
-  
-  case 'my-tweets':
-    tweets();
-    break;
+// checking nodeArgvs[2] function
+var checkNodeArgvs = function(){
+  switch(nodeArgvs[2]){
+    
+    case 'my-tweets':
+      tweets();
+      break;
 
-  case 'spotify-this-song':
-    songSearch();
-    break;
+    case 'spotify-this-song':
+      songSearch();
+      break;
 
-  case 'movie-this':
-    movieSearch();
-    break;
-  
-  default:
-    console.log('error!');
+    case 'movie-this':
+      movieSearch();
+      break;
+    
+    case 'do-what-it-says':
+      randomFile();
+      break;
+
+    default:
+      console.log('error!');
+  }
 }
+
+checkNodeArgvs();
